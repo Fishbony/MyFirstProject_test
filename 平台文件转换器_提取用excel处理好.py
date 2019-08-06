@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 # Gene assignment split in annotation
+# 用于GEO的gene assignment的gene symbol进行修改
 
 import pandas as pd
 import datetime
