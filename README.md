@@ -4,11 +4,7 @@
 
 ## Background
 
-In our hospital, PTA results were get in pdf format like this.
-
-<img src="./pics/sample.jpg" style="zoom:5%;" />
-
-
+In our hospital, PTA results were get in pdf format.
 
 People need to input the result in different frequency by hand so this project is used to free our hand. Tesseract were chosen as OCR engine in our project. Available at https://github.com/tesseract-ocr/tesseract. 
 
