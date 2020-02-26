@@ -1,6 +1,6 @@
 # OCR of PTA(Pure Tone Audiometry) pdf file
 
-> Update  2020.02.23
+> Update  2020.02.26
 
 ## Background
 
@@ -12,7 +12,7 @@ This project does not include a GUI application.
 
 ## TODO
 
-* multithreading
+* multiprocessing
 * complete rename function
 * input the locations of different frequency easily and save them to isolated file.
 
@@ -22,8 +22,8 @@ This project does not include a GUI application.
 ./test
 ./pics
 ./README.md
-./PTA_rename.py (updated)
-./PTA_transfer.py
+./PTA_rename.py (incomplete)
+./PTA_transfer.py (updating)
 ./OCR.py
 ```
 
@@ -31,7 +31,7 @@ This project does not include a GUI application.
 
 * File prepare. Ready to OCR
 
-  * Firstly, please rename your PTA pdf files. If you have renamed your pdf files, this step could be skipped.
+  * Rename your PTA pdf files. It could rename your file by OCR. This function is incomplete. DO NOT run this file. If you have renamed your pdf files, this step could be skipped.
 
     ```cmd
     python PTA_rename.py
@@ -39,7 +39,7 @@ This project does not include a GUI application.
 
     
 
-  * Secondly, please transfer your pdf to jpg. 
+  * Transfer your pdf to jpg. Multiprocessing function is incomplete.
 
     ```cmd
     python PTA_transfer.py
@@ -54,8 +54,6 @@ This project does not include a GUI application.
     ```cmd
     python OCR.py
     ```
-
-A table with csv format could be received.
 
 ## Support
 
