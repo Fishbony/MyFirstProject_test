@@ -9,6 +9,7 @@ import pytesseract
 from PIL import Image
 import time
 import matplotlib.pyplot as plt
+import multiprocessing
 
 # input location of tesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -183,13 +184,14 @@ def ocr_each_cell(filename, freq_loc):
     img = Image.open(filename)
     # cropping size 180*60
     cell = img.crop((freq_loc.get('x'), freq_loc.get('y'), freq_loc.get('x') + 180, freq_loc.get('y') + 60))
-    cell.save('cell.png', dpi=(300, 300))
-    cell = Image.open('cell.png')
+    cell_name = filename[:-4] + '_cell.png'
+    cell.save(cell_name, dpi=(300, 300))
+    cell = Image.open(cell_name)
     # ocr cell to return a string which is a digit or chinese character.
     text = pytesseract.image_to_string(cell)
     text = verify_result(cell, text)
     print('%s is recogized as' % freq_loc.get('frequency'), text)
-    os.remove("cell.png")
+    os.remove(cell_name)
     return {freq_loc.get('frequency'): text}
 
 
@@ -246,29 +248,61 @@ def test(img):
     plt.show()
 
 
-if __name__ == '__main__':
+def multi_main():
     print('广东省人民医院听力室PTA的pdf文件批量识别数据生成excel表格')
     print('====================================1.0版本==========================================')
     print(r'文件所在路径格式，从资源管理器拷贝过来，示例：E:\Article\My-Article\PDF_reading_project')
     print('\n')
-    pic_path = input('Please input the pictures path:')
+    pic_path = input('Please input the images path:')
 
     os.chdir(pic_path)
     pic_list = os.listdir('.')
+    st = time.time()
+    # multiprocessing
+    pool = multiprocessing.Pool()
+    dt = pool.map(get_each_data, pic_list)
+    dt = pd.DataFrame(dt)
+    dt.to_csv('000_pta_data.csv', sep=',', encoding='utf_8_sig')
+    end = time.time()
+    fxxk = end - st
+    print('Done! csv file saved in directory.\n %.2f s in total!' % fxxk)
 
+
+def main():
+    print('广东省人民医院听力室PTA的pdf文件批量识别数据生成excel表格')
+    print('====================================1.0版本==========================================')
+    print(r'文件所在路径格式，从资源管理器拷贝过来，示例：E:\Article\My-Article\PDF_reading_project')
+    print('\n')
+    pic_path = input('Please input the images path:')
+
+    os.chdir(pic_path)
+    pic_list = os.listdir('.')
     dt = []
-    start = time.time()
+    st = time.time()
 
     for each_pic in pic_list:
-        print('%s is being recognizing...' % each_pic[:-4])
+        print('%s is being recognized...' % each_pic[:-4])
         try:
-            dt.append(get_each_data(each_pic))
+          dt.append(get_each_data(each_pic))
         except:
-            print('%s OCR fail!' % each_pic[:-4])
-            print('Please check this file!')
+            print('%s failed. Please check this file!' % each_pic[:-4])
 
     dt = pd.DataFrame(dt)
     dt.to_csv('000_pta_data.csv', sep=',', encoding='utf_8_sig')
     end = time.time()
-    fxxk = end - start
+    fxxk = end - st
     print('Done! csv file saved in directory.\n %.2f s in total!' % fxxk)
+
+
+if __name__ == '__main__':
+    c = input("multiprocessing?(y or n)")
+    if c == 'y':
+        print('Multiprocessing...')
+        multi_main()
+        # 369.76 s in total! Saving img.
+
+    else:
+        print('Non-multiprocessing...')
+        main()
+        #  697.76 s in total! No saving img.
+        # 525.41 s in total! Saving img.

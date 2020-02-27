@@ -1,6 +1,8 @@
 # OCR of PTA(Pure Tone Audiometry) pdf file
 
-> Update  2020.02.26
+> Update  2020.02.27
+>
+> add multiprocessing in OCR.py
 
 ## Background
 
@@ -12,7 +14,6 @@ This project does not include a GUI application.
 
 ## TODO
 
-* multiprocessing
 * complete rename function
 * input the locations of different frequency easily and save them to isolated file.
 
