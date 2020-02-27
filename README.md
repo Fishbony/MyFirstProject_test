@@ -1,8 +1,8 @@
 # OCR of PTA(Pure Tone Audiometry) pdf file
 
-> Update  2020.02.27
+> Update  2020.02.28
 >
-> add multiprocessing in OCR.py
+> add multiprocessing in PTA transfer.py 
 
 ## Background
 
@@ -24,7 +24,7 @@ This project does not include a GUI application.
 ./pics
 ./README.md
 ./PTA_rename.py (incomplete)
-./PTA_transfer.py (updating)
+./PTA_transfer.py
 ./OCR.py
 ```
 
@@ -66,6 +66,6 @@ This project does not include a GUI application.
 
 Name: Fishbony
 
-Affiliates: Posgraduate student in Shantou University Medical College and resident in Guangdong Provincial Peoples' Hospital
+Affiliates: Postgraduate student in Shantou University Medical College and resident in Guangdong Provincial Peoples' Hospital
 
 Email: czhangent@163.com
