@@ -139,8 +139,10 @@ def verify_result(ig_class, result):
                 result = pytesseract.image_to_string(ig_class, config=psm)
             except:
                 pass
-            if result.isdigit():
-                break
+            if result.isdigit() or result == '-5':
+                result = int(result)
+                if result < 130 and result % 5 == 0:
+                    return result
 
     if result.isdigit() or result == '-5':
         result = int(result)
@@ -217,6 +219,11 @@ def get_each_data(filename):
             c_v = list(cell_data.values())[0]
             each_pta[c_k] = c_v
         print("识别数目：", each_pta.size)
+        # 填写右边的骨导
+        for each_result in fre_loc()[2]:
+            name = list(each_result.values())[0]
+            n_name = name[:-2] + 'AC'
+            each_pta[name] = 'notest'
 
     elif bc_result == 2:  # 只是右边
 
@@ -228,6 +235,12 @@ def get_each_data(filename):
             c_v = list(cell_data.values())[0]
             each_pta[c_k] = c_v
         print("识别数目：", each_pta.size)
+        # 填写左边骨导
+        for each_result in fre_loc()[1]:
+            name = list(each_result.values())[0]
+            n_name = name[:-2] + 'AC'
+            each_pta[name] = 'notest'
+        print("完成骨导填充")
 
     else:
         # 双侧均未做
@@ -238,6 +251,12 @@ def get_each_data(filename):
             c_v = list(cell_data.values())[0]
             each_pta[c_k] = c_v
         print("识别数目：", each_pta.size)
+
+        for each_result in (fre_loc()[1] + fre_loc()[2]):
+            name = list(each_result.values())[0]
+            n_name = name[:-2] + 'AC'
+            each_pta[name] = 'notest'
+        print("完成骨导填充")
 
     return each_pta
 
@@ -262,7 +281,8 @@ def multi_main():
     pool = multiprocessing.Pool()
     dt = pool.map(get_each_data, pic_list)
     dt = pd.DataFrame(dt)
-    dt.to_csv('000_pta_data.csv', sep=',', encoding='utf_8_sig')
+    dt.to_csv('000_pta_excel.csv', sep=',', encoding='utf_8_sig')
+    dt.to_csv('000_pta_dtat.txt', sep='\t')
     end = time.time()
     fxxk = end - st
     print('Done! csv file saved in directory.\n %.2f s in total!' % fxxk)
@@ -283,12 +303,13 @@ def main():
     for each_pic in pic_list:
         print('%s is being recognized...' % each_pic[:-4])
         try:
-          dt.append(get_each_data(each_pic))
+            dt.append(get_each_data(each_pic))
         except:
             print('%s failed. Please check this file!' % each_pic[:-4])
 
     dt = pd.DataFrame(dt)
-    dt.to_csv('000_pta_data.csv', sep=',', encoding='utf_8_sig')
+    dt.to_csv('000_pta_excel.csv', sep=',', encoding='utf_8_sig')
+    dt.to_csv('000_pta_dt.txt', sep='\t')
     end = time.time()
     fxxk = end - st
     print('Done! csv file saved in directory.\n %.2f s in total!' % fxxk)

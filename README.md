@@ -1,8 +1,8 @@
 # OCR of PTA(Pure Tone Audiometry) pdf file
 
-> Update  2020.02.28
+> Update  2020.03.01
 >
-> add multiprocessing in PTA transfer.py 
+> fix the problem in OCR.py and update PTA_rename.py
 
 ## Background
 
@@ -30,6 +30,8 @@ This project does not include a GUI application.
 
 ## How to run file
 
+Windows platform
+
 * File prepare. Ready to OCR
 
   * Rename your PTA pdf files. It could rename your file by OCR. This function is incomplete. DO NOT run this file. If you have renamed your pdf files, this step could be skipped.
@@ -40,7 +42,7 @@ This project does not include a GUI application.
 
     
 
-  * Transfer your pdf to jpg. Multiprocessing function is incomplete.
+  * Transfer your pdf to jpg.
 
     ```cmd
     python PTA_transfer.py
