@@ -13,11 +13,13 @@ def transfer(filename):
     start = time.time()
     print("%s transfering..." % filename)
     pil_img = pdf2image.convert_from_path(filename, dpi=500, fmt='jpg')
+    img_name = filename.split('\\')[-1][:-4] + '.jpg'
+    # img_path = '.\\pics\\' + img_name
     for image in pil_img:
-        image.save(filename[:-4] + ".jpg")
+        image.save(img_name)
     end = time.time()
     c = end - start
-    print('%s: %f s in total' % (filename, c))
+    print('%s: %f s in total' % (img_name, c))
 
 
 def multi_process(pdf_list):
@@ -27,8 +29,17 @@ def multi_process(pdf_list):
 
 def main():
     wd = input('Please in put file directory:')
-    os.chdir(wd)
-    pdf_list = os.listdir('.')
+    pic_dir = wd + '\\' + 'pics'
+    os.mkdir(pic_dir)
+    pdf_list = []
+
+    for root, dirs, files in os.walk(wd):
+        for file in files:
+            if '.pdf' in file:
+                pdf_list.append(os.path.join(root, file))
+
+    os.chdir(pic_dir)
+
     c = input('Multiprocessing (y or n)')
     st = time.time()
     if c == 'y':
@@ -41,13 +52,9 @@ def main():
                 transfer(pdf)
             except:
                 print('%s transfer fail! Please check the file.' % pdf[:-4])
-    # move into directory
-    os.makedirs('./pics')
-    pic_list = [jpg for jpg in os.listdir('.') if 'jpg' in jpg]
-    for pic in pic_list:
-        dst = './pics/' + pic
-        shutil.move(pic, dst)
+
     end = time.time()
+    print('%d in total! %d transfer!' % (len(pdf_list), len(os.listdir('.'))))
     print('Done! %.2f s in total!' % (end - st))
 
 
