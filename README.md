@@ -1,8 +1,8 @@
 # OCR of PTA(Pure Tone Audiometry) pdf file
 
-> Update  2020.03.01
+> Update  2020.03.20
 >
-> fix the problem in OCR.py and update PTA_rename.py
+> Update PTA_transfer.py
 
 ## Background
 
