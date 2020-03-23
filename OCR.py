@@ -175,6 +175,13 @@ def verify_result(ig_class, result):
 
     result = ''.join(result.split())
 
+    if result == '一5':
+        result = -5
+    elif result == 'B5':
+        result = 55
+    elif result == '泓5':
+        result = 25 
+
     return result
 
 
