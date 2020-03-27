@@ -11,8 +11,21 @@ import time
 import matplotlib.pyplot as plt
 import multiprocessing
 
-# input location of tesseract
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+def test_engine(engine_path):
+    """check tesseract.exe available"""
+
+    assert isinstance(engine_path, str)
+
+    pytesseract.pytesseract.tesseract_cmd = engine_path
+    try:
+        img = Image.open("./pics/engine_test.PNG")
+        pytesseract.image_to_string(img)
+        print("Engine path correct.")
+        return True
+    except:
+        print("Please check your engine setting.")
+        return False
 
 
 def initial_one_patient(filename):
@@ -180,7 +193,7 @@ def verify_result(ig_class, result):
     elif result == 'B5':
         result = 55
     elif result == '泓5':
-        result = 25 
+        result = 25
 
     return result
 
@@ -200,7 +213,10 @@ def ocr_each_cell(filename, freq_loc):
     text = pytesseract.image_to_string(cell)
     text = verify_result(cell, text)
     print('%s is recogized as' % freq_loc.get('frequency'), text)
-    os.remove(cell_name)
+    try:
+        os.remove(cell_name)
+    except:
+        pass
     return {freq_loc.get('frequency'): text}
 
 
@@ -298,6 +314,8 @@ def multi_main():
 def main():
     print('广东省人民医院听力室PTA的pdf文件批量识别数据生成excel表格')
     print('====================================1.0版本==========================================')
+
+
     print(r'文件所在路径格式，从资源管理器拷贝过来，示例：E:\Article\My-Article\PDF_reading_project')
     print('\n')
     pic_path = input('Please input the images path:')
@@ -323,14 +341,21 @@ def main():
 
 
 if __name__ == '__main__':
-    c = input("multiprocessing?(y or n)")
-    if c == 'y':
-        print('Multiprocessing...')
-        multi_main()
-        # 369.76 s in total! Saving img.
+    print("Please input your tesseract engine path:")
+    print(r'e.g: H:\Programing\Tesseract-OCR\tesseract.exe')
+    e_path = input("Input your path")
 
-    else:
-        print('Non-multiprocessing...')
-        main()
-        #  697.76 s in total! No saving img.
-        # 525.41 s in total! Saving img.
+    if test_engine(e_path):
+        pytesseract.pytesseract.tesseract_cmd = e_path
+
+        c = input("multiprocessing?(y or n)")
+        if c == 'y':
+            print('Multiprocessing...')
+            multi_main()
+            # 369.76 s in total! Saving img.
+
+        else:
+            print('Non-multiprocessing...')
+            main()
+            #  697.76 s in total! No saving img.
+            # 525.41 s in total! Saving img.
